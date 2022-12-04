@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "target": "ES2017",
+        "module": "commonjs",
+        "incremental": true,
+        "baseUrl": "./src",
+        "outDir": "./dist",
+        "typeRoots": ["./src/types"],
+        "allowJs": true,
+        "esModuleInterop": true,
+        "removeComments": true
+    }
+}
