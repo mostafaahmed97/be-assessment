@@ -1,13 +1,11 @@
 import Check from "../check/check.model";
 import Report from "../report/report.model";
-import { ICheck } from "../check/check.entity";
+import alertSvc from "../alerts/alerts.service";
 
-import axios, { AxiosRequestConfig } from "axios";
-import { axiosInstance } from "../../utilities/axios";
-import { IBaseReport } from "../report/report.entity";
-
-import url from "node:url";
 import { Types } from "mongoose";
+import { AxiosRequestConfig } from "axios";
+import { ICheck } from "../check/check.entity";
+import { axiosInstance } from "../../utilities/axios";
 
 class PollingService {
   private static activeChecks: { [checkId: string]: NodeJS.Timer } = {};
@@ -86,14 +84,15 @@ class PollingService {
 
       try {
         const { headers } = await axiosInstance.get(requestUrl, requestConfig);
-        responseTime = parseInt(headers["req-duration"]!) / 1000;
+        responseTime = parseInt(headers["req-duration"]!);
 
         status = "up";
         uptime += check.interval / 1000;
-        console.log("Website is up");
+        console.log("Website is up", check.url);
 
         if (report!.status == "down") {
           // TODO: emit website up event
+          alertSvc.emit("website-status-change");
         }
       } catch (err) {
         status = "down";
@@ -101,10 +100,16 @@ class PollingService {
         if (report!.status == "up") {
           // TODO: emit website down event
           outages = 1;
+          alertSvc.emit("website-status-change");
         }
       }
 
-      console.log(uptime, downtime, outages);
+      console.log({
+        uptime,
+        downtime,
+        outages,
+        responseTime,
+      });
 
       await Report.findOneAndUpdate(
         { checkId: check.id },

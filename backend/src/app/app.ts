@@ -26,6 +26,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api", routes);
 
 const errorhandler: ErrorRequestHandler = function (err, req, res, next) {
+  console.log(err);
   const code = err.code || 500;
   const message = err.error || getReasonPhrase(code);
   return res.status(code).send({ message });

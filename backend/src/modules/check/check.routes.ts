@@ -7,14 +7,25 @@ import { checkSvc } from "./check.service";
 const router = Router();
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  return res.send("Aaa");
+  try {
+    const response = await checkSvc.get(req.user.id);
+    console.log("All the checks for user", response);
+    return res.send(response);
+  } catch (error) {
+    return next(error);
+  }
 });
 
 router.get(
   "/:id",
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    if (!req.params.id) throw { code: 400 };
-    return res.send("Aaa");
+    try {
+      if (!req.params.id) throw { code: 400 };
+      const response = await checkSvc.getOne(req.user.id, req.params.id);
+      return res.send(response);
+    } catch (error) {
+      return next(error);
+    }
   }
 );
 
@@ -22,25 +33,45 @@ router.post(
   "/",
   checkValidators.create,
   async (req: Request, res: Response, next: NextFunction) => {
-    const data: IBaseCheck = req.body;
-    const userId = req.user.id;
-    const response = await checkSvc.create(data, userId);
-
-    return res.send(req.body);
+    try {
+      const data: IBaseCheck = req.body;
+      const userId = req.user.id;
+      const response = await checkSvc.create(data, userId);
+      return res.send(response);
+    } catch (error) {
+      return next(error);
+    }
   }
 );
 
 router.patch(
   "/:id",
-  async (req: Request, res: Response, next: NextFunction) => {
-    return res.send("Aaa");
+  checkValidators.create,
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user.id;
+      const checkId = req.params.id;
+      const payload: IBaseCheck = req.body;
+      const response = await checkSvc.update(userId, checkId, payload);
+      return res.send(response);
+    } catch (error) {
+      return next(error);
+    }
   }
 );
 
 router.delete(
   "/:id",
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    return res.send("Aaa");
+    try {
+      const userId = req.user.id;
+      const checkId = req.params.id;
+
+      await checkSvc.delete(userId, checkId);
+      return res.status(204).send();
+    } catch (error) {
+      return next(error);
+    }
   }
 );
 
