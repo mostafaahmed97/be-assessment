@@ -20,6 +20,20 @@ and database will be available at `localhost:27017`
 - **Express** as http server.
 - **Jest** for unit testing.
 
+## Implemented Features
+
+- [x] Stateless authentication (using JWT)
+- [x] CRUD for checks/reports for allowed users only
+- [x] Data validation for routes
+- [x] Send alert on website status change
+- [x] Docker containerization
+- [x] Scalable alerts module (interfaces only)
+
+#### TODO
+
+- [] Unit tests for checks/reports
+- [] Implement alerts module
+
 ## Project Structure
 
 ```
