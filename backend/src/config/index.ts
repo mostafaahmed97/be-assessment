@@ -21,8 +21,8 @@ const config = {
   mailer: {
     service: "gmail",
     host: "smtp.gmail.com",
-    user: "signupemail450@gmail.com",
-    pass: "@dventure123",
+    user: "addemailhere@test.com",
+    pass: "yourpassword",
   },
 };
 

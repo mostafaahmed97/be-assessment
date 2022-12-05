@@ -15,7 +15,7 @@ class ReportService {
   }
 
   async getByTag(userId: string, tag: string): Promise<IReport[] | []> {
-    console.log("Checks");
+    console.log(userId, tag);
 
     const checksWithTag = await Check.find({
       userId: new Types.ObjectId(userId),
@@ -25,9 +25,7 @@ class ReportService {
     console.log(checksWithTag);
 
     if (!checksWithTag.length) return [];
-
     const checkIds = checksWithTag.map((c) => c.id);
-    console.log(checkIds);
 
     const reports = await Report.find({
       id: { $in: checkIds },

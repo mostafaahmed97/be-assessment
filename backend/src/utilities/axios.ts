@@ -3,24 +3,26 @@ import axios from "axios";
 const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use((config) => {
-  const timeMs = process.hrtime()[0] * 1000;
-  config.headers!["req-start"] = timeMs;
+  //const timeMs = process.hrtime()[0] * 1000;
+  const now = Date.now();
+  config.headers!["req-start"] = now;
   return config;
 });
 
 axiosInstance.interceptors.response.use(
   (response: any) => {
-    const timeMs = process.hrtime()[0] * 1000;
-    const reqStartMs: number = response.config.headers["req-start"];
+    // const timeMs = process.hrtime()[0] * 1000;
+    const now = Date.now();
+    const startTime: number = response.config.headers["req-start"];
 
-    response.headers["req-duration"] = timeMs - reqStartMs;
+    response.headers["req-duration"] = now - startTime;
     return response;
   },
   (response: any) => {
-    const timeMs = process.hrtime()[0] * 1000;
-    const reqStartMs: number = response.config.headers["req-start"];
+    const now = Date.now();
+    const startTime: number = response.config.headers["req-start"];
 
-    response.headers["req-duration"] = timeMs - reqStartMs;
+    response.headers["req-duration"] = now - startTime;
     return response;
   }
 );

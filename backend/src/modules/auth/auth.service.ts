@@ -5,6 +5,8 @@ import User from "../user/user.model";
 import { IAuthResponse } from "./auth.interface";
 import { IBaseUser } from "modules/user/user.interface";
 import { mailer } from "../../utilities/mailer";
+import { nanoid } from "nanoid";
+import Token from "./tokens/token.model";
 
 class AuthenticationService {
   async login(email: string, password: string): Promise<IAuthResponse> {
@@ -24,13 +26,33 @@ class AuthenticationService {
     user.password = await bcrypt.hash(user.password, 12);
     const newUser = await User.create(user);
 
-    mailer.sendMail({
-      to: newUser.email,
-      subject: "Verify Acc",
-      text: "Verification email",
-    });
+    const verificationHash = nanoid(12);
+    await Token.create({ hash: verificationHash, userId: newUser.id });
+
+    // mailer.sendMail({
+    //   to: newUser.email,
+    //   subject: "Verify Acc",
+    //   text: `Click the link to verify your email
+    //     ${config}
+    //   `,
+    // });
 
     return this.generateToken(newUser.toJSON());
+  }
+
+  async verify(userId: string, hash: string) {
+    const token = await Token.findOne({
+      hash,
+      userId,
+    }).exec();
+
+    if (!token) throw { code: 404 };
+
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { $set: { isVerified: true } }
+    );
+    await token.delete();
   }
 
   private generateToken(

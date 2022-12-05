@@ -5,6 +5,7 @@ const userSchema = new Schema<IBaseUser>({
   username: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
+  isVerified: { type: Boolean, default: false },
 });
 
 userSchema.virtual("id").get(function () {

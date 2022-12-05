@@ -1,6 +1,6 @@
 import Check from "../check/check.model";
 import Report from "../report/report.model";
-import alertSvc from "../alerts/alerts.service";
+import alertSvc from "../alert/alert.service";
 
 import { Types } from "mongoose";
 import { AxiosRequestConfig } from "axios";
@@ -131,6 +131,5 @@ class PollingService {
 }
 
 const pollingSvc = new PollingService();
-pollingSvc.bootstrap();
 
 export { pollingSvc };

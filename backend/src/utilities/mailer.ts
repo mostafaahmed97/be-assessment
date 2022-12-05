@@ -16,10 +16,10 @@ class Mailer {
       service: config.mailer.service,
       port: 587,
       secure: false,
-      auth: {
-        user: config.mailer.user,
-        pass: config.mailer.pass,
-      },
+      // auth: {
+      //   user: config.mailer.user,
+      //   pass: config.mailer.pass,
+      // },
     });
   }
 
