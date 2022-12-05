@@ -31,9 +31,9 @@ and database will be available at `localhost:27017`
 
 #### TODO
 
-- [] Unit tests for checks/reports
-- [] Implement alerts module
-- [] Add volume to db docker to persist data
+- [ ] Unit tests for checks/reports
+- [ ] Implement alerts module
+- [ ] Add volume to db docker to persist data
 
 ## Project Structure
 
