@@ -45,7 +45,7 @@ backend/
   middleware/ -> global middleware
   modules/    -> application code, split by feature
     <modulename>
-      <modulename.entity.ts>   -> types & interfaces used throughout module
+      <modulename>.entity.ts   -> types & interfaces used throughout module
       <modulename>.routes      -> routes for resource
       <modulename>.validators  -> validation schemas for routes (using Joi)
       <modulename>.model       -> model & schema used in db operations
