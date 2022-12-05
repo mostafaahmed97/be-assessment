@@ -7,6 +7,5 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npx tsc
-
-CMD node dist/src/index.js
+RUN npm run build
+CMD npm run start
